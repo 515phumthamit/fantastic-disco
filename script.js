@@ -56,16 +56,11 @@ function dragOver(e) {
 
 // ✅ รองรับมือถือด้วย touch event
 function enableTouch(tile) {
-  tile.addEventListener("touchstart", e => {
-    tile.classList.add("dragging");
-  });
-
   tile.addEventListener("touchend", e => {
-    tile.classList.remove("dragging");
     const endX = e.changedTouches[0].clientX;
     const endY = e.changedTouches[0].clientY;
-
     const target = document.elementFromPoint(endX, endY);
+
     if (target && target.classList.contains("tile")) {
       puzzle.insertBefore(tile, target);
       tiles = Array.from(puzzle.children);
@@ -75,7 +70,7 @@ function enableTouch(tile) {
   });
 }
 
-// ✅ ฟังก์ชันอัปเดตตำแหน่งภาพให้ตรงกับ index ใหม่
+// ✅ ฟังก์ชันอัปเดตตำแหน่งภาพให้ตรงกับ index ปัจจุบัน
 function updateBackground() {
   tiles.forEach((tile, i) => {
     tile.style.backgroundPosition = `${-(i % 3) * 100}px ${-Math.floor(i / 3) * 100}px`;
