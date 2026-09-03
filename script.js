@@ -21,8 +21,12 @@ function createPuzzle() {
 }
 
 function shuffle() {
-  tiles.sort(() => Math.random() - 0.5);
-  tiles.forEach(tile => puzzle.appendChild(tile));
+  // สุ่มตำแหน่งจริงใน DOM
+  const shuffled = [...tiles];
+  shuffled.sort(() => Math.random() - 0.5);
+  puzzle.innerHTML = "";
+  shuffled.forEach(tile => puzzle.appendChild(tile));
+  tiles = shuffled;
 }
 
 function dragStart(e) {
@@ -33,13 +37,31 @@ function drop(e) {
   e.preventDefault();
   const fromIndex = e.dataTransfer.getData("index");
   const toIndex = e.target.dataset.index;
-  puzzle.insertBefore(tiles[fromIndex], tiles[toIndex]);
+
+  const fromTile = tiles[fromIndex];
+  const toTile = tiles[toIndex];
+
+  if (fromTile && toTile) {
+    const fromPos = puzzle.children[fromIndex];
+    puzzle.insertBefore(fromTile, toTile);
+    // อัปเดต array ให้ตรงกับ DOM
+    tiles = Array.from(puzzle.children);
+    checkWin();
+  }
 }
 
 function dragOver(e) {
   e.preventDefault();
 }
 
-// ✅ ตอนโหลดหน้า: สร้าง puzzle แล้วสับทันที
+// ✅ ตรวจสอบว่าต่อเสร็จหรือยัง
+function checkWin() {
+  const correct = tiles.every((tile, i) => tile.dataset.index == i);
+  if (correct) {
+    alert("เก่งมาก ต่อสำเร็จ! 🎉");
+  }
+}
+
+// โหลดครั้งแรก → สร้าง + สับทันที
 createPuzzle();
 shuffle();
