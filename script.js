@@ -15,13 +15,13 @@ function createPuzzle() {
     tile.addEventListener("dragstart", dragStart);
     tile.addEventListener("drop", drop);
     tile.addEventListener("dragover", dragOver);
+    enableTouch(tile);   // ✅ รองรับมือถือ
     puzzle.appendChild(tile);
     tiles.push(tile);
   }
 }
 
 function shuffle() {
-  // สุ่มตำแหน่งจริงใน DOM
   const shuffled = [...tiles];
   shuffled.sort(() => Math.random() - 0.5);
   puzzle.innerHTML = "";
@@ -42,9 +42,7 @@ function drop(e) {
   const toTile = tiles[toIndex];
 
   if (fromTile && toTile) {
-    const fromPos = puzzle.children[fromIndex];
     puzzle.insertBefore(fromTile, toTile);
-    // อัปเดต array ให้ตรงกับ DOM
     tiles = Array.from(puzzle.children);
     checkWin();
   }
@@ -52,6 +50,30 @@ function drop(e) {
 
 function dragOver(e) {
   e.preventDefault();
+}
+
+// ✅ รองรับมือถือด้วย touch event
+function enableTouch(tile) {
+  let startX, startY;
+
+  tile.addEventListener("touchstart", e => {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    tile.classList.add("dragging");
+  });
+
+  tile.addEventListener("touchend", e => {
+    tile.classList.remove("dragging");
+    const endX = e.changedTouches[0].clientX;
+    const endY = e.changedTouches[0].clientY;
+
+    const target = document.elementFromPoint(endX, endY);
+    if (target && target.classList.contains("tile")) {
+      puzzle.insertBefore(tile, target);
+      tiles = Array.from(puzzle.children);
+      checkWin();
+    }
+  });
 }
 
 // ✅ ตรวจสอบว่าต่อเสร็จหรือยัง
