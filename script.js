@@ -15,19 +15,16 @@ function createPuzzle() {
     tile.addEventListener("dragstart", dragStart);
     tile.addEventListener("drop", drop);
     tile.addEventListener("dragover", dragOver);
-    enableTouch(tile);   // ✅ รองรับมือถือ
+    enableTouch(tile); // รองรับมือถือ
     puzzle.appendChild(tile);
     tiles.push(tile);
   }
 }
 
 function shuffle() {
-  const shuffled = [...tiles];
-  shuffled.sort(() => Math.random() - 0.5);
+  tiles.sort(() => Math.random() - 0.5);
   puzzle.innerHTML = "";
-  shuffled.forEach(tile => puzzle.appendChild(tile));
-  tiles = shuffled;
-  updateBackground(); // ✅ อัปเดตตำแหน่งภาพหลังสับ
+  tiles.forEach(tile => puzzle.appendChild(tile));
 }
 
 function dragStart(e) {
@@ -38,14 +35,11 @@ function drop(e) {
   e.preventDefault();
   const fromIndex = e.dataTransfer.getData("index");
   const toIndex = e.target.dataset.index;
-
   const fromTile = tiles[fromIndex];
   const toTile = tiles[toIndex];
-
   if (fromTile && toTile) {
     puzzle.insertBefore(fromTile, toTile);
     tiles = Array.from(puzzle.children);
-    updateBackground(); // ✅ อัปเดตตำแหน่งภาพหลังลาก
     checkWin();
   }
 }
@@ -60,20 +54,11 @@ function enableTouch(tile) {
     const endX = e.changedTouches[0].clientX;
     const endY = e.changedTouches[0].clientY;
     const target = document.elementFromPoint(endX, endY);
-
     if (target && target.classList.contains("tile")) {
       puzzle.insertBefore(tile, target);
       tiles = Array.from(puzzle.children);
-      updateBackground(); // ✅ อัปเดตตำแหน่งภาพหลังลากบนมือถือ
       checkWin();
     }
-  });
-}
-
-// ✅ ฟังก์ชันอัปเดตตำแหน่งภาพให้ตรงกับ index ปัจจุบัน
-function updateBackground() {
-  tiles.forEach((tile, i) => {
-    tile.style.backgroundPosition = `${-(i % 3) * 100}px ${-Math.floor(i / 3) * 100}px`;
   });
 }
 
