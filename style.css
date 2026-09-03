@@ -3,29 +3,24 @@ body {
   color: #f5f5f5;
   font-family: 'Prompt', sans-serif;
   text-align: center;
+  margin: 0;
+  padding: 0;
 }
+
 h1, h2 {
   color: #ff69b4;
 }
+
+nav {
+  margin: 20px 0;
+}
+
 nav a {
   color: #00bfff;
   margin: 0 10px;
   text-decoration: none;
 }
-body {
-  background-color: #121212;
-  color: #f5f5f5;
-  font-family: 'Prompt', sans-serif;
-  text-align: center;
-}
-h1 {
-  color: #ff69b4;
-}
-nav a {
-  color: #00bfff;
-  margin: 0 10px;
-  text-decoration: none;
-}
+
 #puzzle {
   display: grid;
   grid-template-columns: repeat(3, 100px);
@@ -33,9 +28,29 @@ nav a {
   gap: 2px;
   margin: 20px auto;
 }
+
 .tile {
   width: 100px;
   height: 100px;
   border: 1px solid #333;
   cursor: pointer;
+}
+
+/* ✅ Responsive สำหรับมือถือ */
+@media (max-width: 600px) {
+  h1, h2 {
+    font-size: 1.5em;
+  }
+  nav a {
+    display: block;
+    margin: 10px 0;
+  }
+  #puzzle {
+    grid-template-columns: repeat(3, 80px);
+    grid-template-rows: repeat(3, 80px);
+  }
+  .tile {
+    width: 80px;
+    height: 80px;
+  }
 }
