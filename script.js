@@ -40,5 +40,6 @@ function dragOver(e) {
   e.preventDefault();
 }
 
+// ✅ ตอนโหลดหน้า: สร้าง puzzle แล้วสับทันที
 createPuzzle();
-
+shuffle();
